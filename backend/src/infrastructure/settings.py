@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     port: int
     debug_mode: bool
     openai_api_key: str
+    openai_api_key: str
     chroma: ChromaSettings
 
     model_config = SettingsConfigDict(
