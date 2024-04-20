@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="tailwind.min.js"></script>
+</head>
+<body>
+    <div class="container p-3">
+        <h1 class="font-sans text-lg">BHL Chrome Extension</h1>
+        <button
+                id="capture-btn"
+                type="button"
+                class="font-sans text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >Capture</button>
+        <div id="suggestions"></div>
+        <audio controls id="audio-playback"></audio>
+    </div>
+
+    <script src="content.js"></script>
+</body>
+</html>
