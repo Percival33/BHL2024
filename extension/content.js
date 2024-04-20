@@ -1,4 +1,4 @@
-const baseApiUrl = "http://localhost:8000";
+const baseApiUrl = "http://localhost:8080";
 
 const captureButton = document.getElementById("capture-btn");
 const captureIcon = document.getElementById("recordingIcon");
@@ -37,7 +37,7 @@ function createDataRow(item, index) {
     row.dataset.index = index;
 
     row.innerHTML = `
-                <a href=${item.reflink}>
+                <a href=${item.reflink} target="_blank">
                     <div class="grid grid-rows-2 items-center">
                         <div class="font-bold text-white">${item.title}</div>
                         <div class="text-white">${item.description}</div>
@@ -74,17 +74,17 @@ const endCapturing = () => {
 
 const sendAudioBlob = (audioBlob) => {
     const formData = new FormData();
-    formData.append('file', audioBlob, 'recording.mp3');
-    const sessionId = sessionStorage.getItem('sessionId');
+    formData.append('audio_file', audioBlob, 'recording.mp3');
+    const sessionId = sessionStorage.getItem('session_id');
     fetch(baseApiUrl + "/upload_audio", {
         method: 'POST',
         body: formData,
-        headers: sessionId ? {'sessionId': sessionId} : {}
+        headers: sessionId ? {'session_id': sessionId} : {}
     })
         .then(response => {
-            if (response.headers.has('sessionId')) {
-                const receivedSessionId = response.headers.get("sessionId");
-                sessionStorage.setItem('sessionId', receivedSessionId);
+            if (response.headers.has('session_id')) {
+                const receivedSessionId = response.headers.get("session_id");
+                sessionStorage.setItem('session_id', receivedSessionId);
             }
             return response.json()
         })
