@@ -1,8 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from openai import OpenAI
 
 from src.application.speech_to_text import OpenAISpeechToText
 from src.application.summarizer import OpenAISummarizer
+=======
+import chromadb
+
+>>>>>>> 741159d (Setup chromadb)
 from src.infrastructure.chroma.client import get_chroma_client
 
 from dependency_injector import containers, providers
@@ -22,6 +27,7 @@ class Container(containers.DeclarativeContainer):
     )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     chroma_client = providers.Singleton(get_chroma_client)
 
     openai_client = providers.Singleton(lambda: OpenAI(api_key=settings.openai_api_key))
@@ -33,3 +39,6 @@ class Container(containers.DeclarativeContainer):
 =======
     int_provider = providers.Factory(lambda: 1)
 >>>>>>> 99a700f (setup dependency injector framework)
+=======
+    chroma_client = providers.Singleton(get_chroma_client)
+>>>>>>> 741159d (Setup chromadb)

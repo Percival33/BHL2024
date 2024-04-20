@@ -11,7 +11,10 @@ class Settings(BaseSettings):
     host: str
     port: int
     debug_mode: bool
+<<<<<<< HEAD
     openai_api_key: str
+=======
+>>>>>>> 741159d (Setup chromadb)
     chroma: ChromaSettings
 
     model_config = SettingsConfigDict(
