@@ -4,6 +4,7 @@ from typing import Annotated
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, UploadFile, Depends, status, HTTPException
 
+from src.application.embedding_repository import EmbeddingRepository
 from src.application.note_repository import NoteRepository
 from src.application.speech_to_text import SpeechToText
 from src.application.summarizer import Summarizer
@@ -22,7 +23,8 @@ async def process_audio_chunk(
         session_id: Annotated[SessionId, Depends(provide_session_id)],
         speech_to_text: SpeechToText = Depends(Provide[Container.speech_to_text]),
         summarizer: Summarizer = Depends(Provide[Container.summarizer]),
-        note_repository: NoteRepository = Depends(Provide[Container.note_repository])
+        note_repository: NoteRepository = Depends(Provide[Container.note_repository]),
+        embedding_repository: EmbeddingRepository = Depends(Provide[Container.embedding_repository]),
 ) -> None:
     content = await audio_file.read()
 
@@ -37,12 +39,26 @@ async def process_audio_chunk(
     note = summarizer.summarize(session_id, transcript)
 
     note_repository.save(note)
+    embedding_repository.save(note)
 
 
-@router.get("/suggestions/{fname}")
+@router.get("/suggestions/{session_id}")
 @inject
-async def get_suggestions() -> None:
-    pass
+async def get_suggestions(
+        session_id: str,
+        note_repository: NoteRepository = Depends(Provide[Container.note_repository]),
+        embedding_repository: EmbeddingRepository = Depends(Provide[Container.embedding_repository]),
+) -> list[NoteResponse]:
+    session_id = SessionId(session_id)
+
+    note = note_repository.find_one(session_id)
+    if not note:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note doesn't exist")
+
+    similar_ids = embedding_repository.find_similar(note)
+    print("similar", similar_ids)
+
+    return list(map(lambda n: NoteResponse.from_note(n), note_repository.find(ids=similar_ids)))
 
 
 @router.get("/note")
@@ -60,7 +76,6 @@ async def get_note(
         note_repository: NoteRepository = Depends(Provide[Container.note_repository])
 ) -> NoteResponse:
     note = note_repository.find_one(SessionId(session_id))
-
     if not note:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note doesn't exist")
 

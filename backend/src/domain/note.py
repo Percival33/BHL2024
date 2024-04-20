@@ -32,5 +32,13 @@ class Note:
     def created_at(self) -> datetime.datetime:
         return self._created_at
 
+    def __dict__(self) -> dict:
+        return {
+            "id": self._session_id.value,
+            "title": self._title,
+            "content": self._content,
+            "created_at": self._created_at,
+        }
+
     def __str__(self) -> str:
         return f"{self.title}: {self.text}"
