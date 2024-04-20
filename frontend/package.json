@@ -12,6 +12,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "mock": "json-server -p 8888 --watch mock_db/data.json",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -36,6 +37,7 @@
     ]
   },
   "devDependencies": {
+    "json-server": "^1.0.0-alpha.23",
     "tailwindcss": "^3.4.3"
   }
 }
