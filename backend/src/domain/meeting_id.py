@@ -1,8 +1,20 @@
 import uuid
 
+from src.domain.exceptions import DomainException
+
+
+class InvalidMeetingId(DomainException):
+    def __init__(self, value: str) -> None:
+        super().__init__(f"'{value}' is not a valid meeting id")
+
 
 class MeetingId:
     def __init__(self, value: str) -> None:
+        try:
+            uuid.UUID(value)
+        except ValueError:
+            raise InvalidMeetingId(value)
+
         self._value = value
 
     @property

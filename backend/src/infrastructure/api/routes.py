@@ -8,7 +8,7 @@ from src.application.meeting_audio_analyzer import MeetingAudioAnalyzer
 from src.application.note_repository import NoteRepository
 from src.domain.meeting_id import MeetingId
 from src.infrastructure.api.dependencies import provide_meeting_id
-from src.infrastructure.api.responses import NoteResponse, UploadAudioResponse
+from src.infrastructure.api.responses import NoteResponse, UploadAudioResponse, SimilarNoteResponse
 from src.infrastructure.containers import Container
 
 router = APIRouter()
@@ -28,22 +28,27 @@ async def process_audio_chunk(
     return UploadAudioResponse(meeting_id=meeting_id.value)
 
 
-@router.get("/suggestions/{meeting_id}")
+@router.get("/suggestions/{meeting_id}", response_model=list[SimilarNoteResponse])
 @inject
 async def get_suggestions(
         meeting_id: str,
         note_repository: NoteRepository = Depends(Provide[Container.note_repository]),
         embedding_repository: EmbeddingRepository = Depends(Provide[Container.embedding_repository]),
-) -> list[NoteResponse]:
+) -> list[SimilarNoteResponse]:
     meeting_id = MeetingId(meeting_id)
 
     note = note_repository.find_one(meeting_id)
     if not note:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note doesn't exist")
 
-    similar_ids = embedding_repository.find_similar(note)
+    similar_notes = embedding_repository.find_similar(note)
+    similarities = [match.similarity for match in similar_notes]
 
-    return list(map(lambda n: NoteResponse.from_note(n), note_repository.find(ids=similar_ids)))
+    similar_notes = note_repository.find(ids=[note.meeting_id for note in similar_notes])
+
+    return [
+        SimilarNoteResponse.from_note(note, id_.similarity) for note, id_ in zip(similar_notes, similarities)
+    ]
 
 
 @router.get("/note")

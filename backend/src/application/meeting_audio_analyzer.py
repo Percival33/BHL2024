@@ -28,7 +28,7 @@ class MeetingAudioAnalyzer:
     def process_meeting_audio(self, meeting_id: MeetingId, audio: bytes) -> None:
         temp_file = os.path.join(self._RECORDINGS_DIR, f"{str(uuid.uuid4())}.mp3")
 
-        with open(temp_file, "rb+") as f_handle:
+        with open(temp_file, "wb+") as f_handle:
             f_handle.write(audio)
             f_handle.seek(0)
             transcript = self._speech_to_text.create_transcription(f_handle)
