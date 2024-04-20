@@ -1,7 +1,7 @@
-export function Navbar() {
+export function Header() {
   return (
     <>
-      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+      <nav class="bg-white border-gray-200 dark:bg-gray-900 mb-5">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
             href="https://flowbite.com/"
