@@ -1,3 +1,4 @@
+import uuid
 from typing import Annotated
 
 from dependency_injector.wiring import inject, Provide

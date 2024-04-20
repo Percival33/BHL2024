@@ -7,7 +7,7 @@ from src.domain.session_id import SessionId
 
 
 class NoteResponse(BaseModel):
-    session_id: SessionId
+    session_id: str
     title: str
     content: str
     created_at: datetime.datetime
