@@ -3,6 +3,7 @@ const baseApiUrl = "http://localhost:8000";
 const captureButton = document.getElementById("capture-btn");
 const suggestionsDiv = document.getElementById("suggestions");
 const audioPlayback = document.getElementById('audio-playback');
+const output = new AudioContext();
 
 const suggestionsTimeout = 3000;
 
@@ -82,6 +83,8 @@ async function getMixedStream(streamId) {
             video: false
         }
     );
+    const source = output.createMediaStreamSource(tabStream);
+    source.connect(output.destination);
     const micStream = await navigator.mediaDevices.getUserMedia({audio: true})
     return mixAudioStreams(micStream, tabStream)
 }
