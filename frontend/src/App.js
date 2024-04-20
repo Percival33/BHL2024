@@ -6,46 +6,9 @@ import {createBrowserRouter, Route, RouterProvider, Routes} from "react-router-d
 import {NoteDetail} from "./pages/NoteDetail";
 import {Footer} from "./components/Footer";
 
-function fetchNoteData(noteId) {
-  const cards = [
-    {
-      "meeting_id": "ai1",
-      "title": "\"Understanding Artificial Intelligence: Potential and Concerns\"",
-      "content": "Artificial intelligence (AI), a branch of computer science, is designed to perform tasks usually requiring human intelligence, such as learning, reasoning, problem-solving, perception, and language understanding. AI uses complex algorithms and large data sets to train machines to identify patterns, make decisions, and predict outcomes. It is becoming essential in various industries like healthcare, finance, transportation, and entertainment, improving efficiency, personalization, and automation. However, AI also presents ethical and practical challenges, including privacy concerns, job displacement, and the consequences of autonomous decision-making.",
-      "created_at": "2024-04-20T19:42:25.630692"
-    },
-    {
-      "meeting_id": "java",
-      "title": "\"Overview of Java Programming Language\"",
-      "content": "Java is a high-level, class-based, object-oriented programming language developed by Sun Microsystems in the mid-90s. It is renowned for its minimal dependency implications and its write-once-run-anywhere capability, which allows Java code compiled on one platform to run on any other platform without recompilation. This feature is enabled by the Java Runtime Environment, which must be installed on the device for the Java code to run. Java is one of the most widely used programming languages globally.",
-      "created_at": "2024-04-20T19:42:25.630692"
-    },
-    {
-      "meeting_id": "ai2",
-      "title": "\"Understanding Artificial Intelligence and Its Types\"",
-      "content": "Artificial Intelligence (AI) is the process of instilling human-like intelligence in machines, enabling them to understand natural language, recognize patterns, solve problems, and make decisions. The main objective of AI is to allow machines to execute tasks that traditionally require human intelligence. AI is generally divided into two categories: Narrow AI, which is designed for specific tasks, and General AI, which has broader capabilities.",
-      "created_at": "2024-04-20T19:42:25.630692"
-    },
-    {
-      "meeting_id": "literature",
-      "title": "\"Exploring Polish Literature: Historical Overview\"",
-      "content": "Polish literature has a rich and varied history, spanning from the Middle Ages to the present day, and is characterized by its depth and resilience in the face of political oppression. It features significant works in poetry, drama, and prose. Key figures include Adam Mickiewicz, known for his romantic epics embodying the spirit of the Polish people, and Czesław Miłosz, a poet who delved into human morality and modern world issues. The 20th century saw writers like Witold Gombrowicz and Stanisław Lem pushing the boundaries of form, exploring eccentricism and science fiction.",
-      "created_at": "2024-04-20T19:42:25.630692"
-    },
-    {
-      "meeting_id": "test",
-      "title": "\"Testing Whisper's Functionality\"",
-      "content": "The text is a brief test recording to verify the proper functioning of Whisper.",
-      "created_at": "2024-04-20T19:42:25.630692"
-    },
-    {
-      "meeting_id": "jre",
-      "title": "\"Understanding the Java Runtime Environment\"",
-      "content": "The Java Runtime Environment (JRE) is a component of the Java Development Kit (JDK) used to execute Java applications. It comprises the Java Virtual Machine (JVM), core classes, and supporting files. The JRE is installed on a computer to run Java applications without the necessity for personal development.",
-      "created_at": "2024-04-20T19:42:25.630692"
-    }
-  ];
-  const note = cards.filter(el => el.meeting_id === noteId)[0];
+async function fetchNoteData(meeting_id) {
+  const response = await fetch(`http://localhost:8080/note/${meeting_id}`);
+  const note = await response.json();
   return Promise.resolve(note);
 }
 
@@ -55,10 +18,6 @@ function App() {
     {
       path: "/",
       element: <Gallery searchTerm={searchTerm}/>,
-      // loader: async () => {
-      //   return fetch(baseApiUrl + "/note")
-      //     .then((response) => response.json());
-      // }
     },
     {
       path: "/note/:noteId",
