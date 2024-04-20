@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from collections import defaultdict
 from typing import Annotated
 
@@ -10,6 +11,9 @@ from src.application.speech_to_text import SpeechToText
 from src.application.summarizer import Summarizer
 from src.domain.session_id import SessionId
 =======
+=======
+import chromadb
+>>>>>>> 741159d (Setup chromadb)
 import uvicorn
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
@@ -60,6 +64,13 @@ async def summarize_audio_chunk() -> None:
 
 @router.get("/suggestions")
 @inject
+<<<<<<< HEAD
 async def get_suggestions(aa: int = Depends(Provide[Container.int_provider])) -> None:
     print(aa)
 >>>>>>> 99a700f (setup dependency injector framework)
+=======
+async def get_suggestions(
+        chroma_client: chromadb.ClientAPI = Depends(Provide[Container.chroma_client])
+) -> None:
+    print(chroma_client.heartbeat())
+>>>>>>> 741159d (Setup chromadb)

@@ -4,5 +4,8 @@ pydantic==2.7.0
 pydantic-settings==2.2.1
 chromadb==0.4.24
 dependency-injector==4.41.0
+<<<<<<< HEAD
 openai==1.23.2
 python-multipart==0.0.9
+=======
+>>>>>>> 741159d (Setup chromadb)
