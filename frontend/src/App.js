@@ -69,11 +69,11 @@ function App() {
     }
   ]);
   return (
-    <>
+    <div className={"App"}>
       <Header onSearchChange={setSearchTerm}/>
       <RouterProvider router={router}/>
       <Footer/>
-    </>
+    </div>
   );
 }
 
