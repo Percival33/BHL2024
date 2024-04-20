@@ -1,8 +1,9 @@
 import random
+import uuid
+
 import uvicorn
 from fastapi import FastAPI, UploadFile, Header
 from fastapi.responses import JSONResponse
-import uuid
 
 app = FastAPI()
 
@@ -24,8 +25,8 @@ async def upload_audio_chunk(file: UploadFile, sessionId: str = Header(None)) ->
     print(f"Uploaded: {file.filename}")
     recording_cnt[sessionId] = recording_cnt.get(sessionId, 0) + 1
     content = await file.read()
-    with open(f"recordings/chunk-{recording_cnt.get(sessionId)}-{sessionId}.mp3", "wb") as f:
-        f.write(content)
+    # with open(f"recordings/chunk-{recording_cnt.get(sessionId)}-{sessionId}.mp3", "wb") as f:
+    #     f.write(content)
 
     return JSONResponse(headers={'sessionId': str(sessionId)}, status_code=200, content="OK")
 
