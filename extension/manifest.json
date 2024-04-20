@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Side panel extension",
+  "version": "1.0",
+  "description": "Extension with a default side panel.",
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "permissions": ["sidePanel", "tabCapture", "storage", "activeTab"],
+  "host_permissions": [
+      "http://localhost/*"
+  ]
+}
