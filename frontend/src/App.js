@@ -1,10 +1,10 @@
+import React, {useState} from 'react';
+
+import {Header} from "./components/Header";
 import {Gallery} from "./components/Galery";
 import {createBrowserRouter, Route, RouterProvider, Routes} from "react-router-dom";
 import {NoteDetail} from "./pages/NoteDetail";
-import {Header} from "./components/Header";
 import {Footer} from "./components/Footer";
-
-const baseApiUrl = "http://localhost:8888";
 
 function fetchNoteData(noteId) {
   const cards = [
@@ -45,15 +45,16 @@ function fetchNoteData(noteId) {
       "created_at": "2024-04-20T19:42:25.630692"
     }
   ];
-  const note= cards.filter(el => el.meeting_id === noteId)[0];
+  const note = cards.filter(el => el.meeting_id === noteId)[0];
   return Promise.resolve(note);
 }
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState('');
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Gallery/>,
+      element: <Gallery searchTerm={searchTerm}/>,
       // loader: async () => {
       //   return fetch(baseApiUrl + "/note")
       //     .then((response) => response.json());
@@ -67,10 +68,9 @@ function App() {
       }
     }
   ]);
-
   return (
     <>
-      <Header/>
+      <Header onSearchChange={setSearchTerm}/>
       <RouterProvider router={router}/>
       <Footer/>
     </>
