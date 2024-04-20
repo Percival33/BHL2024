@@ -26,8 +26,15 @@ class JsonFileNoteRepository(NoteRepository):
     _db_file = "db.json"
 
     def __init__(self) -> None:
-        if not self._db and os.path.exists(self._db_file):
+        if not os.path.exists(self._db_file):
+            self._create_db_file()
+
+        if not self._db:
             self._load_db_dump()
+
+    def _create_db_file(self) -> None:
+        with open(self._db_file, "w"):
+            pass
 
     def _load_db_dump(self) -> None:
         with open(self._db_file, "r") as f:
