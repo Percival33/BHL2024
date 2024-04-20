@@ -4,7 +4,7 @@ import datetime
 import json
 
 from src.domain.note import Note
-from src.domain.session_id import SessionId
+from src.domain.meeting_id import MeetingId
 
 
 class NoteRepository(abc.ABC):
@@ -13,15 +13,15 @@ class NoteRepository(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def find(self, ids: list[SessionId] | None = None) -> list[Note]:
+    def find(self, ids: list[MeetingId] | None = None) -> list[Note]:
         pass
 
     @abc.abstractmethod
-    def find_one(self, id_: SessionId) -> Note | None:
+    def find_one(self, id_: MeetingId) -> Note | None:
         pass
 
 
-class InMemoryNoteRepository(NoteRepository):
+class JsonFileNoteRepository(NoteRepository):
     _db: dict[str, Note] = {}
     _db_file = "db.json"
 
@@ -34,7 +34,7 @@ class InMemoryNoteRepository(NoteRepository):
             try:
                 for row in json.load(f):
                     self._db[row["id"]] = Note(
-                        session_id=SessionId(row["id"]),
+                        meeting_id=MeetingId(row["id"]),
                         title=row["title"],
                         content=row["content"],
                         created_at=datetime.datetime.fromisoformat(row["created_at"]),
@@ -52,18 +52,11 @@ class InMemoryNoteRepository(NoteRepository):
         with open(self._db_file, "w") as f:
             json.dump(dump, f, default=str)
 
-    def find(self, ids: list[SessionId] | None = None) -> list[Note]:
+    def find(self, ids: list[MeetingId] | None = None) -> list[Note]:
         if ids is None:
             return list(self._db.values())
 
-        ids_map = set(id_.value for id_ in ids)
+        return [self._db[id_.value] for id_ in ids]
 
-        results = []
-        for id_, note in self._db.items():
-            if id_ in ids_map:
-                results.append(note)
-
-        return list(self._db.values())
-
-    def find_one(self, id_: SessionId) -> Note | None:
+    def find_one(self, id_: MeetingId) -> Note | None:
         return self._db.get(id_.value)

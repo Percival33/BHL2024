@@ -1,7 +1,7 @@
 import uuid
 
 
-class SessionId:
+class MeetingId:
     def __init__(self, value: str) -> None:
         self._value = value
 
@@ -10,5 +10,5 @@ class SessionId:
         return self._value
 
     @classmethod
-    def generate(cls) -> "SessionId":
+    def generate(cls) -> "MeetingId":
         return cls(str(uuid.uuid4()))

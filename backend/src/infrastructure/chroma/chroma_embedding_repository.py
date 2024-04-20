@@ -2,7 +2,7 @@ import chromadb
 
 from src.application.embedding_repository import EmbeddingRepository
 from src.domain.note import Note
-from src.domain.session_id import SessionId
+from src.domain.meeting_id import MeetingId
 
 
 class ChromaEmbeddingRepository(EmbeddingRepository):
@@ -18,10 +18,10 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
             ids=note.id.value,
         )
 
-    def find_similar(self, note: Note, n_results: int = 3) -> list[SessionId]:
+    def find_similar(self, note: Note, n_results: int = 3) -> list[MeetingId]:
         results = self._collection.query(
             query_texts=note.text,
             n_results=n_results
         )
-        print(results)
-        return [SessionId(result) for result in results["ids"][0]]
+
+        return [MeetingId(result) for result in results["ids"][0]]
