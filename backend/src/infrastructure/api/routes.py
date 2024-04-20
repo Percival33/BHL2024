@@ -1,3 +1,4 @@
+import chromadb
 import uvicorn
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
@@ -15,5 +16,7 @@ async def summarize_audio_chunk() -> None:
 
 @router.get("/suggestions")
 @inject
-async def get_suggestions(aa: int = Depends(Provide[Container.int_provider])) -> None:
-    print(aa)
+async def get_suggestions(
+        chroma_client: chromadb.ClientAPI = Depends(Provide[Container.chroma_client])
+) -> None:
+    print(chroma_client.heartbeat())

@@ -1,3 +1,7 @@
+import chromadb
+
+from src.infrastructure.chroma.client import get_chroma_client
+
 from dependency_injector import containers, providers
 
 
@@ -8,4 +12,4 @@ class Container(containers.DeclarativeContainer):
         ]
     )
 
-    int_provider = providers.Factory(lambda: 1)
+    chroma_client = providers.Singleton(get_chroma_client)
