@@ -28,9 +28,13 @@ import chromadb
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends, Header, UploadFile
 
-from src.application.session_id_provider import create_session_id
 from src.application.speech_to_text import SpeechToText
+<<<<<<< HEAD
 >>>>>>> ed700fa (Setup whisper speech to text)
+=======
+from src.application.summarizer import Summarizer
+from src.domain.session_id import SessionId
+>>>>>>> ecb70db (Audio processing pipeline)
 from src.infrastructure.containers import Container
 
 router = APIRouter()
@@ -44,6 +48,7 @@ chunk_counter = defaultdict(int)
 @inject
 async def process_audio_chunk(
         session_id: Annotated[str, Header(default_factory=SessionId.generate)],
+<<<<<<< HEAD
         audio_file: UploadFile,
 ) -> None:
     chunk_counter[session_id] += 1
@@ -77,6 +82,8 @@ chunk_counter = defaultdict(int)
 @inject
 async def process_audio_chunk(
         session_id: Annotated[str, Header(default_factory=create_session_id)],
+=======
+>>>>>>> ecb70db (Audio processing pipeline)
         audio_file: UploadFile,
 ) -> None:
     chunk_counter[session_id] += 1
@@ -87,7 +94,7 @@ async def process_audio_chunk(
         f.write(content)
 
 
-@router.get("/suggestions")
+@router.get("/suggestions/{fname}")
 @inject
 <<<<<<< HEAD
 async def get_suggestions(aa: int = Depends(Provide[Container.int_provider])) -> None:
@@ -95,8 +102,11 @@ async def get_suggestions(aa: int = Depends(Provide[Container.int_provider])) ->
 >>>>>>> 99a700f (setup dependency injector framework)
 =======
 async def get_suggestions(
-        chroma_client: chromadb.ClientAPI = Depends(Provide[Container.chroma_client])
+        fname: str,
+        speech_to_text: SpeechToText = Depends(Provide[Container.speech_to_text]),
+        summarizer: Summarizer = Depends(Provide[Container.summarizer]),
 ) -> None:
+<<<<<<< HEAD
     print(chroma_client.heartbeat())
 <<<<<<< HEAD
 >>>>>>> 741159d (Setup chromadb)
@@ -111,3 +121,11 @@ async def get_transcription(
     with open("audio.mp3", "rb") as f:
         return speech_to_text.create_transcription(f)
 >>>>>>> ed700fa (Setup whisper speech to text)
+=======
+    print(fname)
+    with open(fname, "rb") as f:
+        transcript = speech_to_text.create_transcription(f)
+
+    note = summarizer.summarize(transcript)
+    print(note)
+>>>>>>> ecb70db (Audio processing pipeline)

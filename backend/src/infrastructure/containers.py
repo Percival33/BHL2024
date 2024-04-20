@@ -5,6 +5,7 @@ from openai import OpenAI
 
 from src.application.speech_to_text import OpenAISpeechToText
 from src.application.summarizer import OpenAISummarizer
+<<<<<<< HEAD
 =======
 import chromadb
 
@@ -14,6 +15,8 @@ from openai import OpenAI
 
 from src.application.speech_to_text import OpenAISpeechToText
 >>>>>>> ed700fa (Setup whisper speech to text)
+=======
+>>>>>>> ecb70db (Audio processing pipeline)
 from src.infrastructure.chroma.client import get_chroma_client
 
 from dependency_injector import containers, providers
@@ -44,6 +47,7 @@ class Container(containers.DeclarativeContainer):
     speech_to_text = providers.Factory(OpenAISpeechToText, openai_client)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     summarizer = providers.Factory(OpenAISummarizer, openai_client)
 
 =======
@@ -54,3 +58,7 @@ class Container(containers.DeclarativeContainer):
 >>>>>>> 741159d (Setup chromadb)
 =======
 >>>>>>> ed700fa (Setup whisper speech to text)
+=======
+    summarizer = providers.Factory(OpenAISummarizer, openai_client)
+
+>>>>>>> ecb70db (Audio processing pipeline)
