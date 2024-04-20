@@ -13,7 +13,7 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
         self._collection = self._client.get_or_create_collection(self._COLLECTION_NAME)
 
     def save(self, note: Note) -> None:
-        self._collection.add(
+        self._collection.upsert(
             documents=note.text,
             ids=note.id.value,
         )

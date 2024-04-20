@@ -1,13 +1,11 @@
-import uuid
 from typing import Annotated
 
 from dependency_injector.wiring import inject, Provide
-from fastapi import APIRouter, UploadFile, Depends, status, HTTPException
+from fastapi import APIRouter, UploadFile, Depends, status, HTTPException, BackgroundTasks
 
 from src.application.embedding_repository import EmbeddingRepository
+from src.application.meeting_audio_analyzer import MeetingAudioAnalyzer
 from src.application.note_repository import NoteRepository
-from src.application.speech_to_text import SpeechToText
-from src.application.summarizer import Summarizer
 from src.domain.meeting_id import MeetingId
 from src.infrastructure.api.dependencies import provide_meeting_id
 from src.infrastructure.api.responses import NoteResponse, UploadAudioResponse
@@ -19,27 +17,13 @@ router = APIRouter()
 @router.post("/upload_audio", response_model=UploadAudioResponse)
 @inject
 async def process_audio_chunk(
+        background_tasks: BackgroundTasks,
         audio_file: UploadFile,
         meeting_id: Annotated[MeetingId, Depends(provide_meeting_id)],
-        speech_to_text: SpeechToText = Depends(Provide[Container.speech_to_text]),
-        summarizer: Summarizer = Depends(Provide[Container.summarizer]),
-        note_repository: NoteRepository = Depends(Provide[Container.note_repository]),
-        embedding_repository: EmbeddingRepository = Depends(Provide[Container.embedding_repository]),
+        meeting_audio_analyzer: MeetingAudioAnalyzer = Depends(Provide[Container.meeting_audio_analyzer]),
 ) -> UploadAudioResponse:
-    content = await audio_file.read()
-
-    file_name = f"recordings/chunk-{meeting_id.value}-{str(uuid.uuid4())}.mp3"
-
-    with open(file_name, "wb") as f:
-        f.write(content)
-
-    with open(file_name, "rb") as f:
-        transcript = speech_to_text.create_transcription(f)
-
-    note = summarizer.summarize(meeting_id, transcript)
-
-    note_repository.save(note)
-    embedding_repository.save(note)
+    audio_content = await audio_file.read()
+    background_tasks.add_task(meeting_audio_analyzer.process_meeting_audio, meeting_id, audio_content)
 
     return UploadAudioResponse(meeting_id=meeting_id.value)
 
