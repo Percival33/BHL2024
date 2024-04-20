@@ -1,5 +1,6 @@
 from openai import OpenAI
 
+from src.application.meeting_audio_analyzer import MeetingAudioAnalyzer
 from src.application.note_repository import JsonFileNoteRepository
 from src.application.speech_to_text import OpenAISpeechToText
 from src.application.summarizer import OpenAISummarizer
@@ -29,3 +30,11 @@ class Container(containers.DeclarativeContainer):
     note_repository = providers.Factory(JsonFileNoteRepository)
 
     embedding_repository = providers.Factory(ChromaEmbeddingRepository, chroma_client)
+
+    meeting_audio_analyzer = providers.Factory(
+        MeetingAudioAnalyzer,
+        speech_to_text,
+        summarizer,
+        note_repository,
+        embedding_repository
+    )
