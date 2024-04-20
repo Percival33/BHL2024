@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>BHL Chrome extension</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="output.css" rel="stylesheet">
+    <link href="./src/css/output.css" rel="stylesheet">
 
 </head>
-<body>
-<div class="bg-white">
-    <div class="items-center flex bg-dark p-4">
-        <div class="flex-1 text-left p-4 text-white font-mono text-3xl" id="timer">00:00:00</div>
-        <button class="flex-2 p-3 text-white rounded-lg text-2xl text-center flex items-center justify-center space-x-2"
+<body class="bg-our_white font-sans">
+<div>
+    <div class="items-center flex bg-our_dark p-4">
+        <div class="flex-1 text-left p-4 text-our_white font-mono text-3xl" id="timer">00:00:00</div>
+        <button class="flex-2 p-3 text-our_white rounded-lg text-2xl text-center flex items-center justify-center space-x-2"
                 id="capture-btn" type="button">
             <?xml version="1.0" encoding="utf-8"?>
             <svg id="recordingIcon" fill="#A5668B" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg"
@@ -33,6 +33,6 @@
 
 </div>
 
-<script src="content.js"></script>
+<script type="module" src="./src/js/content.js"></script>
 </body>
 </html>
