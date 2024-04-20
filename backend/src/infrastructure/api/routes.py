@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from collections import defaultdict
 from typing import Annotated
 
@@ -8,10 +9,17 @@ from fastapi import APIRouter, Depends, Header, UploadFile
 from src.application.speech_to_text import SpeechToText
 from src.application.summarizer import Summarizer
 from src.domain.session_id import SessionId
+=======
+import uvicorn
+from dependency_injector.wiring import inject, Provide
+from fastapi import APIRouter, Depends
+
+>>>>>>> 99a700f (setup dependency injector framework)
 from src.infrastructure.containers import Container
 
 router = APIRouter()
 
+<<<<<<< HEAD
 chunk_counter = defaultdict(int)
 
 
@@ -42,3 +50,16 @@ async def get_suggestions(
 
     note = summarizer.summarize(transcript)
     print(note)
+=======
+
+@router.post("/summarize_chunk")
+@inject
+async def summarize_audio_chunk() -> None:
+    pass
+
+
+@router.get("/suggestions")
+@inject
+async def get_suggestions(aa: int = Depends(Provide[Container.int_provider])) -> None:
+    print(aa)
+>>>>>>> 99a700f (setup dependency injector framework)
