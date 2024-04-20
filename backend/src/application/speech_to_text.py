@@ -1,6 +1,10 @@
 import abc
 import typing
 
+<<<<<<< HEAD
+=======
+import openai
+>>>>>>> ed700fa (Setup whisper speech to text)
 from openai import OpenAI
 
 
