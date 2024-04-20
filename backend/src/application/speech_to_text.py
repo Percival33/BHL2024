@@ -1,7 +1,6 @@
 import abc
 import typing
 
-import openai
 from openai import OpenAI
 
 

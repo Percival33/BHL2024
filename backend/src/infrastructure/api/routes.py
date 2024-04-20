@@ -5,8 +5,9 @@ import chromadb
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends, Header, UploadFile
 
-from src.application.session_id_provider import create_session_id
 from src.application.speech_to_text import SpeechToText
+from src.application.summarizer import Summarizer
+from src.domain.session_id import SessionId
 from src.infrastructure.containers import Container
 
 router = APIRouter()
@@ -17,7 +18,7 @@ chunk_counter = defaultdict(int)
 @router.post("/upload_audio")
 @inject
 async def process_audio_chunk(
-        session_id: Annotated[str, Header(default_factory=create_session_id)],
+        session_id: Annotated[str, Header(default_factory=SessionId.generate)],
         audio_file: UploadFile,
 ) -> None:
     chunk_counter[session_id] += 1
@@ -28,18 +29,16 @@ async def process_audio_chunk(
         f.write(content)
 
 
-@router.get("/suggestions")
+@router.get("/suggestions/{fname}")
 @inject
 async def get_suggestions(
-        chroma_client: chromadb.ClientAPI = Depends(Provide[Container.chroma_client])
+        fname: str,
+        speech_to_text: SpeechToText = Depends(Provide[Container.speech_to_text]),
+        summarizer: Summarizer = Depends(Provide[Container.summarizer]),
 ) -> None:
-    print(chroma_client.heartbeat())
+    print(fname)
+    with open(fname, "rb") as f:
+        transcript = speech_to_text.create_transcription(f)
 
-
-@router.get("/transcription")
-@inject
-async def get_transcription(
-        speech_to_text: SpeechToText = Depends(Provide[Container.speech_to_text])
-) -> str:
-    with open("audio.mp3", "rb") as f:
-        return speech_to_text.create_transcription(f)
+    note = summarizer.summarize(transcript)
+    print(note)

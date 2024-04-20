@@ -1,6 +1,7 @@
 from openai import OpenAI
 
 from src.application.speech_to_text import OpenAISpeechToText
+from src.application.summarizer import OpenAISummarizer
 from src.infrastructure.chroma.client import get_chroma_client
 
 from dependency_injector import containers, providers
@@ -20,4 +21,6 @@ class Container(containers.DeclarativeContainer):
     openai_client = providers.Singleton(lambda: OpenAI(api_key=settings.openai_api_key))
 
     speech_to_text = providers.Factory(OpenAISpeechToText, openai_client)
+
+    summarizer = providers.Factory(OpenAISummarizer, openai_client)
 
