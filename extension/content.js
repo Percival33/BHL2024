@@ -1,27 +1,63 @@
-const baseApiUrl = "http://localhost:8000";
+const baseApiUrl = "http://localhost:8080";
 
 const captureButton = document.getElementById("capture-btn");
+const captureIcon = document.getElementById("recordingIcon");
+const timerDiv = document.getElementById("timer");
+const notesList = document.getElementById("sugUL");
+const captureButtonText = document.getElementById("capture-btn-text");
 const suggestionsDiv = document.getElementById("suggestions");
 const audioPlayback = document.getElementById('audio-playback');
-const output = new AudioContext();
 
 const suggestionsTimeout = 3000;
 
 let mediaRecorder;
-
+let intervalId;
+let elapsedSeconds = 0;
 const renderSuggestionLine = (text) => {
     return `<div class="font-sans text-base">- ${text}</div>`
 }
 
 let suggestionsInterval = null;
+let mockData = [
+    {
+        reflink: "https://twitter.com/mamodrzejewski",
+        title: "Hello Happy World",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nunc tortor, convallis vitae molestie in, posuere in nisi. Pellentesque habitant."
+    },
+    {
+        reflink: "https://twitter.com/mamodrzejewski",
+        title: "Hello Sad World",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nunc tortor, convallis vitae molestie in, posuere in nisi. Pellentesque habitant."
+    },
+]
 
+function createDataRow(item, index) {
+    const row = document.createElement("li");
+    row.className = 'data-row flex rounded-lg bg-dark  items-center p-2 px-6';
+    row.dataset.index = index;
+
+    row.innerHTML = `
+                <a href=${item.reflink} target="_blank">
+                    <div class="grid grid-rows-2 items-center">
+                        <div class="font-bold text-white">${item.title}</div>
+                        <div class="text-white">${item.description}</div>
+                    </div>
+                </a>
+            </li>
+    `;
+    return row;
+}
+
+//TODO back to API
 const getNewSuggestions = async () => {
-    const resp = await fetch(baseApiUrl + "/matching_notes");
-    const data = await resp.json();
+    // const resp = await fetch(baseApiUrl + "/matching_notes");
+    // const data = await resp.json();
 
-    const rows = data.map(row => renderSuggestionLine(row));
-
-    suggestionsDiv.innerHTML = rows.join("");
+    // const rows = data.map(row => renderSuggestionLine(row));
+    suggestionsDiv.innerHTML = "";
+    mockData
+        .map((row, index) => createDataRow(row, index))
+        .forEach(row => suggestionsDiv.appendChild(row))
 }
 
 
@@ -32,23 +68,23 @@ const endCapturing = () => {
 
     clearInterval(suggestionsInterval);
     suggestionsInterval = null;
-    captureButton.innerText = "Capture";
+    captureButtonText.innerText = "Capture";
     suggestionsDiv.innerHTML = "";
 }
 
 const sendAudioBlob = (audioBlob) => {
     const formData = new FormData();
-    formData.append('file', audioBlob, 'recording.mp3');
-    const sessionId = sessionStorage.getItem('sessionId');
+    formData.append('audio_file', audioBlob, 'recording.mp3');
+    const sessionId = sessionStorage.getItem('session_id');
     fetch(baseApiUrl + "/upload_audio", {
         method: 'POST',
         body: formData,
-        headers: sessionId ? {'sessionId': sessionId} : {}
+        headers: sessionId ? {'session_id': sessionId} : {}
     })
         .then(response => {
-            if (response.headers.has('sessionId')) {
-                const receivedSessionId = response.headers.get("sessionId");
-                sessionStorage.setItem('sessionId', receivedSessionId);
+            if (response.headers.has('session_id')) {
+                const receivedSessionId = response.headers.get("session_id");
+                sessionStorage.setItem('session_id', receivedSessionId);
             }
             return response.json()
         })
@@ -60,77 +96,64 @@ const sendAudioBlob = (audioBlob) => {
         });
 }
 
-function mixAudioStreams(micStream, tabStream) {
-    const audioContext = new AudioContext();
-    const source1 = audioContext.createMediaStreamSource(micStream);
-    const source2 = audioContext.createMediaStreamSource(tabStream);
+function updateTime() {
+    elapsedSeconds++;
+    const hours = Math.floor(elapsedSeconds / 3600);
+    const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+    const seconds = elapsedSeconds % 60;
 
-    const destination = audioContext.createMediaStreamDestination();
-    source1.connect(destination);
-    source2.connect(destination);
-
-    return destination.stream;
-}
-
-async function getMixedStream(streamId) {
-    const tabStream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-                mandatory: {
-                    chromeMediaSource: "tab",
-                    chromeMediaSourceId: streamId,
-                },
-            },
-            video: false
-        }
-    );
-    const source = output.createMediaStreamSource(tabStream);
-    source.connect(output.destination);
-    const micStream = await navigator.mediaDevices.getUserMedia({audio: true})
-    return mixAudioStreams(micStream, tabStream)
+    // Format time to HH:MM:SS
+    timerDiv.textContent =
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 
 const startCapturing = () => {
     let audioChunks = [];
-    chrome.tabCapture.getMediaStreamId({}, (streamId) => {
-        getMixedStream(streamId)
-            .then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start(5000);
-                console.log("Started audio recording")
 
-                mediaRecorder.ondataavailable = event => {
-                    if (!event.data.size) {
-                        return;
-                    }
-                    audioChunks.push(event.data);
-                    const audioBlob = new Blob(audioChunks, {type: 'audio/mp3'});
-                    sendAudioBlob(audioBlob);
+    navigator.mediaDevices.getUserMedia({audio: true, video: false})
+        .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start(1000);
+            console.log("Started audio recording")
 
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    console.log(audioUrl);
-                };
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+                console.log("Chunk")
+                const audioBlob = new Blob(audioChunks, {type: 'audio/mp3'});
+                sendAudioBlob(audioBlob);
 
-                mediaRecorder.onstop = () => {
-                    console.log("Stopped recording");
-                };
-            })
-            .catch(e => {
-                console.error('Error capturing audio:', e);
-            });
-    })
+                const audioUrl = URL.createObjectURL(audioBlob);
+                console.log(audioUrl);
+            };
 
+            mediaRecorder.onstop = () => {
+                console.log("Stopped recording");
+            };
+        })
+        .catch(e => {
+            console.error('Error capturing audio:', e);
+        });
 
     getNewSuggestions();
     suggestionsInterval = setInterval(getNewSuggestions, suggestionsTimeout);
-    captureButton.innerText = "Stop Capturing";
+    captureButtonText.innerText = "Stop";
 }
 
 
 captureButton.onclick = () => {
-    if (suggestionsInterval == null) {
-        startCapturing()
+    if (!suggestionsInterval) {
+        intervalId = setInterval(updateTime, 1000);
+        captureIcon.classList.add('blinking')
+        startCapturing();
     } else {
+        clearInterval(intervalId)
+        elapsedSeconds = 0
+        timerDiv.textContent = "00:00:00"
+        captureIcon.classList.remove('blinking')
+
         endCapturing();
     }
 }
+
+
