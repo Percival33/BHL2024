@@ -3,6 +3,7 @@ from openai import OpenAI
 from src.application.note_repository import InMemoryNoteRepository
 from src.application.speech_to_text import OpenAISpeechToText
 from src.application.summarizer import OpenAISummarizer
+from src.infrastructure.chroma.chroma_embedding_repository import ChromaEmbeddingRepository
 
 from src.infrastructure.chroma.client import get_chroma_client
 from src.infrastructure.settings import settings
@@ -26,3 +27,5 @@ class Container(containers.DeclarativeContainer):
     summarizer = providers.Factory(OpenAISummarizer, openai_client)
 
     note_repository = providers.Factory(InMemoryNoteRepository)
+
+    embedding_repository = providers.Factory(ChromaEmbeddingRepository, chroma_client)
