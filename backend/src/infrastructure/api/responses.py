@@ -15,7 +15,7 @@ class NoteResponse(BaseModel):
     @classmethod
     def from_note(cls, note: Note) -> "NoteResponse":
         return cls(
-            session_id=note.id,
+            session_id=note.id.value,
             title=note.title,
             content=note.text,
             created_at=note.created_at
