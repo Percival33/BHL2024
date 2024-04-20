@@ -6,8 +6,23 @@
   "side_panel": {
     "default_path": "sidepanel.html"
   },
-  "permissions": ["sidePanel", "tabCapture", "storage", "activeTab"],
+  "permissions": [
+    "sidePanel",
+    "tabCapture",
+    "storage",
+    "activeTab"
+  ],
   "host_permissions": [
-      "http://localhost/*"
-  ]
+    "http://localhost/*"
+  ],
+  "content_scripts": [
+    {
+      "css": [
+        "output.css"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+  }
 }
