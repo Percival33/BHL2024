@@ -1,5 +1,6 @@
 fastapi==0.110.2
 uvicorn==0.29.0
 pydantic==2.7.0
+pydantic-settings==2.2.1
 chromadb==0.4.24
 dependency-injector==4.41.0

@@ -1,0 +1,6 @@
+services:
+  chromadb:
+    image: chromadb/chroma
+    restart: always
+    ports:
+      - 8000:8000
