@@ -1,14 +1,14 @@
 import abc
-import typing
 
 from openai import OpenAI
 
 from src.domain.note import Note
+from src.domain.session_id import SessionId
 
 
 class Summarizer(abc.ABC):
     @abc.abstractmethod
-    def summarize(self, text: str) -> Note:
+    def summarize(self, session_id: SessionId, text: str) -> Note:
         pass
 
 
@@ -27,11 +27,11 @@ class OpenAISummarizer(Summarizer):
         self._client = client
         self._model_name = model_name
 
-    def summarize(self, text: str) -> Note:
+    def summarize(self, session_id: SessionId, text: str) -> Note:
         title = self._get_title(text)
         abstract = self._get_abstract(text)
 
-        return Note(title, abstract)
+        return Note(session_id, title, abstract)
 
     def _get_title(self, text: str) -> str:
         return self._client.chat.completions.create(

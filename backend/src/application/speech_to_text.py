@@ -1,13 +1,6 @@
 import abc
 import typing
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import openai
->>>>>>> ed700fa (Setup whisper speech to text)
-=======
->>>>>>> ecb70db (Audio processing pipeline)
 from openai import OpenAI
 
 
