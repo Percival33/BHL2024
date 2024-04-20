@@ -2,11 +2,17 @@
 module.exports = {
     content: ["./sidepanel.html"],
     theme: {
-        colors: {
-            white: "#DFDFDF",
-            magenta: "#A5668B",
-            dark: "#1C3144"
-        }
+        extend: {
+            colors: {
+                our_white: "#DFDFDF",
+                our_magenta: "#A5668B",
+                our_gray: "#374151",
+                our_dark: "#1C3144"
+            },
+            fontFamily: {
+                sans: ['Roboto', 'sans-serif']
+            }
+        },
     },
     plugins: [],
 };
