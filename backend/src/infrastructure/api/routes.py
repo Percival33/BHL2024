@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from collections import defaultdict
 from typing import Annotated
 
@@ -19,10 +20,22 @@ from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
 
 >>>>>>> 99a700f (setup dependency injector framework)
+=======
+from collections import defaultdict
+from typing import Annotated
+
+import chromadb
+from dependency_injector.wiring import inject, Provide
+from fastapi import APIRouter, Depends, Header, UploadFile
+
+from src.application.session_id_provider import create_session_id
+from src.application.speech_to_text import SpeechToText
+>>>>>>> ed700fa (Setup whisper speech to text)
 from src.infrastructure.containers import Container
 
 router = APIRouter()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 chunk_counter = defaultdict(int)
 
@@ -55,11 +68,23 @@ async def get_suggestions(
     note = summarizer.summarize(transcript)
     print(note)
 =======
+=======
+chunk_counter = defaultdict(int)
+>>>>>>> ed700fa (Setup whisper speech to text)
 
-@router.post("/summarize_chunk")
+
+@router.post("/upload_audio")
 @inject
-async def summarize_audio_chunk() -> None:
-    pass
+async def process_audio_chunk(
+        session_id: Annotated[str, Header(default_factory=create_session_id)],
+        audio_file: UploadFile,
+) -> None:
+    chunk_counter[session_id] += 1
+
+    content = await audio_file.read()
+
+    with open(f"recordings/{session_id}/chunk-{chunk_counter[session_id]}.mp3", "wb") as f:
+        f.write(content)
 
 
 @router.get("/suggestions")
@@ -73,4 +98,16 @@ async def get_suggestions(
         chroma_client: chromadb.ClientAPI = Depends(Provide[Container.chroma_client])
 ) -> None:
     print(chroma_client.heartbeat())
+<<<<<<< HEAD
 >>>>>>> 741159d (Setup chromadb)
+=======
+
+
+@router.get("/transcription")
+@inject
+async def get_transcription(
+        speech_to_text: SpeechToText = Depends(Provide[Container.speech_to_text])
+) -> str:
+    with open("audio.mp3", "rb") as f:
+        return speech_to_text.create_transcription(f)
+>>>>>>> ed700fa (Setup whisper speech to text)
