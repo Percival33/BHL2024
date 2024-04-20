@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     debug_mode: bool
     openai_api_key: str
     openai_api_key: str
+    frontend_base_url: str
     chroma: ChromaSettings
 
     model_config = SettingsConfigDict(

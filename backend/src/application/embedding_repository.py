@@ -1,7 +1,7 @@
 import abc
 
 from src.domain.note import Note
-from src.domain.session_id import SessionId
+from src.domain.meeting_id import MeetingId
 
 
 class EmbeddingRepository(abc.ABC):
@@ -10,5 +10,5 @@ class EmbeddingRepository(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def find_similar(self, note: Note) -> list[SessionId]:
+    def find_similar(self, note: Note) -> list[MeetingId]:
         pass

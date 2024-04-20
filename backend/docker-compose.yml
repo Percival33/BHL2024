@@ -2,5 +2,11 @@ services:
   chromadb:
     image: chromadb/chroma
     restart: always
+    volumes:
+      - index_data:/chroma/.chroma/index
     ports:
       - 8000:8000
+
+volumes:
+  index_data:
+    driver: local

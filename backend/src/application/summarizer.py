@@ -3,12 +3,12 @@ import abc
 from openai import OpenAI
 
 from src.domain.note import Note
-from src.domain.session_id import SessionId
+from src.domain.meeting_id import MeetingId
 
 
 class Summarizer(abc.ABC):
     @abc.abstractmethod
-    def summarize(self, session_id: SessionId, text: str) -> Note:
+    def summarize(self, meeting_id: MeetingId, text: str) -> Note:
         pass
 
 
@@ -27,11 +27,11 @@ class OpenAISummarizer(Summarizer):
         self._client = client
         self._model_name = model_name
 
-    def summarize(self, session_id: SessionId, text: str) -> Note:
+    def summarize(self, meeting_id: MeetingId, text: str) -> Note:
         title = self._get_title(text)
         abstract = self._get_abstract(text)
 
-        return Note(session_id, title, abstract)
+        return Note(meeting_id, title, abstract)
 
     def _get_title(self, text: str) -> str:
         return self._client.chat.completions.create(
