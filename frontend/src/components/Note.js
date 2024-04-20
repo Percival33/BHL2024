@@ -1,7 +1,10 @@
-export function Card({ url, title, date, description }) {
+import {Link} from "react-router-dom";
+
+export function Note({meeting_id, title, date, description}) {
   return (
-    <a
-      href="#"
+    <Link
+      // to=""
+      to={`/note/${meeting_id}`}
       className="block w-full p-6 bg-our_dark border-4 border-our_dark rounded-lg shadow hover:border-our_magenta"
     >
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -9,6 +12,6 @@ export function Card({ url, title, date, description }) {
       </h5>
       <p className="font-normal text-gray-700 dark:text-gray-200">{date}</p>
       <p className="font-normal text-gray-700 dark:text-gray-400">{description}</p>
-    </a>
+    </Link>
   );
 }
