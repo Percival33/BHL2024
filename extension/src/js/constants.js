@@ -9,5 +9,6 @@ export const responseKeys = {
 }
 
 export const apiEndpoints = {
-    uploadAudio: `${baseApiUrl}/upload_audio`
+    uploadAudio: `${baseApiUrl}/upload_audio`,
+    getSuggestions: (id) => `${baseApiUrl}/suggestions/${id}`
 }
