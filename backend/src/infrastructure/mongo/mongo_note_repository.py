@@ -24,7 +24,7 @@ class MongoNoteRepository(NoteRepository):
         )
 
     def find(self, ids: list[MeetingId] | None = None) -> list[Note]:
-        query = {"meeting_name": {"$in": [id_.value for id_ in ids]}} if ids else {}
+        query = {"meeting_id": {"$in": [id_.value for id_ in ids]}} if ids else {}
         notes = self._notes.find(query)
 
         return [self._map_collection_to_note(note) for note in notes]

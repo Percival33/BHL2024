@@ -21,7 +21,7 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
             ids=note.id.value,
         )
 
-    def find_similar(self, note: Note, n_results: int = 3) -> list[SimilarNote]:
+    def find_similar(self, note: Note, n_results: int = 4) -> list[SimilarNote]:
         results = self._collection.query(
             query_texts=note.text,
             n_results=n_results

@@ -41,14 +41,20 @@ async def get_suggestions(
     if not note:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note doesn't exist")
 
-    similar_notes = embedding_repository.find_similar(note)
-    similarities = [match.similarity for match in similar_notes]
+    similar_notes = [
+        similar_note for similar_note in embedding_repository.find_similar(note)
+        if similar_note.meeting_id.value != meeting_id.value
+    ]
+
+    similarities = {match.meeting_id.value: match.similarity for match in similar_notes}
 
     similar_notes = note_repository.find(ids=[note.meeting_id for note in similar_notes])
 
-    return [
-        SimilarNoteResponse.from_note(note, id_.similarity) for note, id_ in zip(similar_notes, similarities)
-    ]
+    return sorted(
+        [SimilarNoteResponse.from_note(note, similarities[note.id.value]) for note in similar_notes],
+        key=lambda x: x.similarity,
+        reverse=True,
+    )
 
 
 @router.get("/note")
