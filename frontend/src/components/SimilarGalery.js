@@ -33,7 +33,7 @@ export function SimilarGalery({meeting_id}) {
     }).catch(error => {
       console.error("Failed to fetch data", error);
     });
-  }, []);
+  }, [meeting_id]);
 
   const {listA, listB} = splitNotesAlternately(similarNotes);
 
