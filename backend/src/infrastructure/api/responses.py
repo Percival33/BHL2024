@@ -10,6 +10,7 @@ class BaseNoteResponse(BaseModel):
     meeting_id: str
     title: str
     content: str
+    markdown: str
     created_at: datetime.datetime
 
     @computed_field
@@ -25,6 +26,7 @@ class NoteResponse(BaseNoteResponse):
             meeting_id=note.id.value,
             title=note.title,
             content=note.text,
+            markdown=note.markdown,
             created_at=note.created_at
         )
 
@@ -38,6 +40,7 @@ class SimilarNoteResponse(BaseNoteResponse):
             meeting_id=note.id.value,
             title=note.title,
             content=note.text,
+            markdown=note.markdown,
             created_at=note.created_at,
             similarity=similarity
         )

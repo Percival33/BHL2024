@@ -29,7 +29,7 @@ class MongoNoteRepository(NoteRepository):
         )
 
     def find(self, ids: list[MeetingId] | None = None) -> list[Note]:
-        query = {"meeting_id": {"$in": [id_.value for id_ in ids]}} if ids else {}
+        query = {"meeting_id": {"$in": [id_.value for id_ in ids]}} if ids is not None else {}
         notes = self._notes.find(query)
 
         return [self._map_collection_to_note(note) for note in notes]
@@ -47,5 +47,6 @@ class MongoNoteRepository(NoteRepository):
             meeting_id=MeetingId(collection["meeting_id"]),
             title=collection["title"],
             content=collection["content"],
+            markdown=collection["markdown"],
             created_at=collection["created_at"]
         )

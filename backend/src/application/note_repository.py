@@ -44,6 +44,7 @@ class JsonFileNoteRepository(NoteRepository):
                         meeting_id=MeetingId(row["meeting_id"]),
                         title=row["title"],
                         content=row["content"],
+                        markdown=row["markdown"],
                         created_at=datetime.datetime.fromisoformat(row["created_at"]),
                     )
             except json.decoder.JSONDecodeError:  # silent

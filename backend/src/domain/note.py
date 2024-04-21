@@ -9,11 +9,13 @@ class Note:
         meeting_id: MeetingId,
         title: str,
         content: str,
+        markdown: str,
         created_at: datetime.datetime = datetime.datetime.now(),
     ) -> None:
         self._meeting_id = meeting_id
         self._title = title
         self._content = content
+        self._markdown = markdown
         self._created_at = created_at
 
     @property
@@ -29,6 +31,10 @@ class Note:
         return self._content
 
     @property
+    def markdown(self) -> str:
+        return self._markdown
+
+    @property
     def created_at(self) -> datetime.datetime:
         return self._created_at
 
@@ -37,6 +43,7 @@ class Note:
             "meeting_id": self._meeting_id.value,
             "title": self._title,
             "content": self._content,
+            "markdown": self._markdown,
             "created_at": self._created_at,
         }
 

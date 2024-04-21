@@ -45,7 +45,7 @@ async def get_suggestions(
         similar_note for similar_note in embedding_repository.find_similar(note)
         if similar_note.meeting_id.value != meeting_id.value
     ]
-    print(similar_notes)
+
     similarities = {match.meeting_id.value: match.similarity for match in similar_notes}
 
     similar_notes = note_repository.find(ids=[note.meeting_id for note in similar_notes])

@@ -45,12 +45,15 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
             n_results=n_results
         )
 
-        return [
+        normalized_results = [
             SimilarNote(
                 meeting_id=MeetingId(meeting_id),
                 similarity=self._normalize_cosine_similarity(cos_distance)
             ) for meeting_id, cos_distance in zip(results["ids"][0], results["distances"][0])
         ]
+
+        logger.info("Meeting %s, similar notes: %s", note.id, normalized_results)
+        return normalized_results
 
     @staticmethod
     def _normalize_cosine_similarity(cos_distance: float) -> float:
