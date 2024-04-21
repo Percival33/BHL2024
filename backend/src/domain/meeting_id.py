@@ -25,5 +25,8 @@ class MeetingId:
     def generate(cls) -> "MeetingId":
         return cls(str(uuid.uuid4()))
 
+    def __str__(self) -> str:
+        return self._value
+
     def __repr__(self) -> str:
         return self._value

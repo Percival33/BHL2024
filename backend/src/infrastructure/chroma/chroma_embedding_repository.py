@@ -1,3 +1,5 @@
+import logging
+
 import chromadb
 import chromadb.utils.embedding_functions as embedding_functions
 
@@ -5,6 +7,8 @@ from src.application.embedding_repository import EmbeddingRepository, SimilarNot
 from src.domain.note import Note
 from src.domain.meeting_id import MeetingId
 from src.infrastructure.settings import settings
+
+logger = logging.getLogger(__name__)
 
 
 class ChromaEmbeddingRepository(EmbeddingRepository):
@@ -26,12 +30,16 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
         )
 
     def save(self, note: Note) -> None:
+        logger.info("Saving embeddings for meeting %s", note.id)
+
         self._collection.upsert(
             documents=note.text,
             ids=note.id.value,
         )
 
     def find_similar(self, note: Note, n_results: int = 4) -> list[SimilarNote]:
+        logger.info("Retrieving similar notes for meeting %s", note.id)
+
         results = self._collection.query(
             query_texts=note.text,
             n_results=n_results
