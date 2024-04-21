@@ -21,38 +21,10 @@ function splitNotesAlternately(notes) {
 const fetchData = async (meeting_id) => {
   // Uncomment when ready to fetch from API
   const resp = await fetch(baseApiUrl + "/suggestions/" + meeting_id);
-  const data = await resp.json();
-  // const data = [
-  //   {
-  //     meeting_id: "ai2",
-  //     title: "\"Understanding Artificial Intelligence: Potential and Concerns\"",
-  //     similarity: 0.1
-  //   },
-  //   {
-  //     meeting_id: "ai2",
-  //     title: "\"Understanding Artificial Intelligence: Potential and Concerns\"",
-  //     similarity: 0.2
-  //   },
-  //   {
-  //     meeting_id: "ai2",
-  //     title: "\"Understanding Artificial Intelligence: Potential and Concerns\"",
-  //     similarity: 0.3
-  //   },
-  //   {
-  //     meeting_id: "ai2",
-  //     title: "\"Understanding Artificial Intelligence: Potential and Concerns\"",
-  //     similarity: 0.4
-  //   },
-  //   {
-  //     meeting_id: "ai2",
-  //     title: "\"Understanding Artificial Intelligence: Potential and Concerns\"",
-  //     similarity: 0.5
-  //   },
-  // ];
-  return Promise.resolve(data);
+  return await resp.json();
 }
 
-export function SimilarGalery(meeting_id) {
+export function SimilarGalery({meeting_id}) {
   const [similarNotes, setSimilarNotes] = useState([]);
   useEffect(() => {
 

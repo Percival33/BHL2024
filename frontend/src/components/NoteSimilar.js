@@ -3,6 +3,7 @@ import {format} from 'date-fns';
 
 export function NoteSimilar({meeting_id, title, similarity}) {
   var similarityPercentage = Math.floor(similarity * 100);
+  console.log("meeting_id: " + meeting_id + " title: " + title + " similarity: " + similarity + " similarityPercentage: " + similarityPercentage);
   return (
 
     <Link
