@@ -19,8 +19,8 @@ export function Note({meeting_id, title, created_at, content}) {
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
         {title.replaceAll("\"", "")}
       </h5>
-      <p className="font-normal text-gray-700 dark:text-gray-200 mb-2">{format(new Date(created_at), 'dd.MM.yyyy')}</p>
-      <p className="font-normal text-gray-700 dark:text-gray-400 items-end">{truncate(content, 200)}</p>
+      <p className="font-normal text-gray-200 mb-2">{format(new Date(created_at), 'dd.MM.yyyy')}</p>
+      <p className="font-normal text-gray-400 items-end">{truncate(content, 200)}</p>
     </Link>
   );
 }
