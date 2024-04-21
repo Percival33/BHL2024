@@ -1,7 +1,7 @@
-import {Link, useLoaderData} from 'react-router-dom';
+import {useLoaderData} from 'react-router-dom';
 import {SimilarGalery} from "../components/SimilarGalery";
+import Markdown from "react-markdown";
 
-// import {NoteSimilar} from "./components/NoteSimilar";
 
 export function NoteDetail() {
   const note = useLoaderData();
@@ -14,8 +14,8 @@ export function NoteDetail() {
         <p className="text-md text-gray-700 py-1">
           Created on: {new Date(note.created_at).toLocaleDateString()}
         </p>
-        <p className="text-lg text-gray-700 mt-4">
-          {note.content}
+        <p className="">
+          <Markdown className="markdown">{note.markdown}</Markdown>
         </p>
       </div>
       <div className="mx-28 justify-centre ">

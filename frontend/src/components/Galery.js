@@ -8,7 +8,6 @@ const filterDataByTitlePhrase = (responses, phrase) => {
 };
 
 const fetchData = async (phrase = "") => {
-  // Uncomment when ready to fetch from API
   const resp = await fetch(baseApiUrl + "/note");
   const data = await resp.json();
   return filterDataByTitlePhrase(data, phrase);

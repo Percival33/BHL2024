@@ -40,13 +40,13 @@ export function SimilarGalery({meeting_id}) {
   return (
     <div className="justify-center flex place-self-start flex-row gap-0">
       {/*grid grid-cols-2 gap-2*/}
-      <div className="justify-center items-start flex flex-col">
+      <div className="justify-center items-center flex flex-col">
         {listA.map((note) => (
           <NoteSimilar meeting_id={note.meeting_id} title={note.title} similarity={note.similarity}
                        key={note.meeting_id}/>
         ))}
       </div>
-      <div className="justify-center place-self-start flex flex-col">
+      <div className="justify-center items-center place-self-start flex flex-col">
         {listB.map((note) => (
           <NoteSimilar meeting_id={note.meeting_id} title={note.title} similarity={note.similarity}
                        key={note.meeting_id}/>
