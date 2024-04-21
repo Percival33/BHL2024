@@ -24,6 +24,10 @@ class OpenAISummarizer(Summarizer):
     understand the main points of the discussion without needing to read the entire text. 
     Please avoid unnecessary details or tangential points."""
 
+    _MARKDOWN_SYS_PROMPT = """You are a highly skilled AI trained in converting texts to a markdown format.
+    Convert the following text to a valid markdown. Extract headers, paragraphs, bullet points and format them accordingly.
+    Keep all of the original content."""
+
     def __init__(self, client: OpenAI, model_name: str = "gpt-4"):
         self._client = client
         self._model_name = model_name
@@ -36,7 +40,9 @@ class OpenAISummarizer(Summarizer):
             title = title_future.result()
             abstract = abstract_future.result()
 
-        return Note(meeting_id, title, abstract)
+        markdown = self._get_markdown_abstract(abstract)
+
+        return Note(meeting_id, title, abstract, markdown)
 
     def _get_title(self, text: str) -> str:
         return self._client.chat.completions.create(
@@ -54,6 +60,16 @@ class OpenAISummarizer(Summarizer):
             temperature=0,
             messages=[
                 {"role": "system", "content": self._ABSTRACT_SYS_PROMPT},
+                {"role": "user", "content": text}
+            ]
+        ).choices[0].message.content
+
+    def _get_markdown_abstract(self, text: str) -> str:
+        return self._client.chat.completions.create(
+            model=self._model_name,
+            temperature=0,
+            messages=[
+                {"role": "system", "content": self._MARKDOWN_SYS_PROMPT},
                 {"role": "user", "content": text}
             ]
         ).choices[0].message.content
