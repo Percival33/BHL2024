@@ -8,7 +8,7 @@ export function Header({ onSearchChange }) {
           <div className="flex flex-wrap items-left justify-between p-4 mx-40">
             <a href="http://localhost:3000/" className="flex items-left space-x-3 rtl:space-x-reverse">
               <img src="/logo512_our.png" className="h-8" alt="Flowbite Logo" />
-              <span className="self-left text-2xl font-semibold whitespace-nowrap dark:text-white">
+              <span className="self-left text-2xl font-semibold whitespace-nowrap text-white">
               SmartNotes
             </span>
             </a>

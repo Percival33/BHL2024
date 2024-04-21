@@ -2,7 +2,7 @@ import {apiEndpoints, headerConfig, responseKeys} from "./constants.js";
 
 export let mediaRecorder;
 let audioChunks = [];
-const CHUNK_INTERVAL = 10_000;
+const CHUNK_INTERVAL = 8_000;
 const output = new AudioContext();
 const validateBody = (body) => {
     const currentMeetingId = sessionStorage.getItem(headerConfig.sessionKey)

@@ -10,7 +10,7 @@ sessionStorage.clear();
 
 let intervalId;
 let elapsedSeconds = 0;
-const SUGGESTIONS_RATE = 5_000;
+const SUGGESTIONS_RATE = 3_000;
 let suggestionsInterval = null;
 
 
