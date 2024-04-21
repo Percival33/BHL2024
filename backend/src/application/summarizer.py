@@ -16,7 +16,7 @@ class Summarizer(abc.ABC):
 class OpenAISummarizer(Summarizer):
     _TITLE_SYS_PROMPT = """You are a highly skilled AI trained in creating titles for text. 
     I would like you to read the following text and create a title, which matches what the text is about
-    as accurately as possible. Use no more than 5 words."""
+    as accurately as possible. Use no more than 5 words. Use English language."""
 
     _ABSTRACT_SYS_PROMPT = """You are a highly skilled AI trained in language comprehension and summarization. 
     I would like you to read the following text and summarize it into a concise abstract paragraph. 
@@ -45,7 +45,7 @@ class OpenAISummarizer(Summarizer):
         return Note(meeting_id, title, abstract, markdown)
 
     def _get_title(self, text: str) -> str:
-        return self._client.chat.completions.create(
+        title = self._client.chat.completions.create(
             model=self._model_name,
             temperature=0,
             messages=[
@@ -53,6 +53,8 @@ class OpenAISummarizer(Summarizer):
                 {"role": "user", "content": text}
             ]
         ).choices[0].message.content
+
+        return title.replace("\"", "")
 
     def _get_abstract(self, text: str) -> str:
         return self._client.chat.completions.create(
