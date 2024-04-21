@@ -30,10 +30,10 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
         return [
             SimilarNote(
                 meeting_id=MeetingId(meeting_id),
-                similarity=self._normalize_cosine_similarity(cos_similarity)
-            ) for meeting_id, cos_similarity in zip(results["ids"][0], results["distances"][0])
+                similarity=self._normalize_cosine_similarity(cos_distance)
+            ) for meeting_id, cos_distance in zip(results["ids"][0], results["distances"][0])
         ]
 
     @staticmethod
-    def _normalize_cosine_similarity(cosine_similarity: float) -> float:
-        return (cosine_similarity + 1) / 2
+    def _normalize_cosine_similarity(cos_distance: float) -> float:
+        return (2 - cos_distance) / 2

@@ -1,8 +1,6 @@
 import abc
 from dataclasses import dataclass
 
-from pydantic import BaseModel
-
 from src.domain.note import Note
 from src.domain.meeting_id import MeetingId
 
