@@ -5,6 +5,7 @@ import {Gallery} from "./components/Galery";
 import {createBrowserRouter, Route, RouterProvider, Routes} from "react-router-dom";
 import {NoteDetail} from "./pages/NoteDetail";
 import {Footer} from "./components/Footer";
+import {NoteSimilar} from "./components/NoteSimilar";
 
 async function fetchNoteData(meeting_id) {
   const response = await fetch(`http://localhost:8080/note/${meeting_id}`);
