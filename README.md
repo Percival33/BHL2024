@@ -1,65 +1,68 @@
-# BHL 2024
-## Team
-Ale to ty dzwonisz
+# BHL 2024 Hackathon Documentation
+## Team "Ale to ty dzwonisz"
 
+### Members
 - [Dawid Kaszyński](https://github.com/dawidkasz)
 - [Mikołaj Szawerda](https://github.com/MikolajSzawerda)
 - [Krzysztof Fijałkowski](https://github.com/kfijalkowski1)
 - [Marcin Jarczewski](https://github.com/Percival33)
 
-## Idea
+## Project Overview: Unified Meeting Framework
 
-Framework for recording online and offline meetings together with preparing summeries and proposing notes from previous meetings that have similar semantic meaning.
+### Executive Summary
+Our project introduces an innovative framework designed to enhance meeting productivity by seamlessly integrating the recording, summarization, and retrieval of both online and offline meetings. Utilizing a browser extension, our system captures audio inputs and leverages cutting-edge AI technologies to process, summarize, and contextually link meeting content, presenting it through a highly accessible user interface.
 
-The main point of interaction with the user is browser extension that records microphone and system audio output and sends data to backened. System after processing audio returns most suitable notes in real time and allows to redirect to separate panel that allows to read content of past summaries and proposes similar notes. Panel allows also full-text search. 
+### System Components
 
-## Overview 
+#### Browser Extension
+- **Functionality**: Captures microphone and system audio for real-time processing.
+- **Features**: Syncs processed data to provide contextually relevant notes in real time.
+- **Technology**: Developed using TailwindCSS, Vanilla JavaScript, and Chromium APIs.
+- **Accessibility**: Compliant with WCAG accessibility standards, ensuring usability for all users.
+
+#### Backend
+- **Speech-to-Text**: Employs OpenAI's Whisper model to accurately transcribe audio data.
+- **Content Summarization and Analysis**: Utilizes GPT models to summarize meetings and compute embeddings for semantic linkage of notes.
+- **Data Management**: Stores summaries and their associated embeddings in a structured database for efficient retrieval.
+- **Technology Stack**: OpenAI Whisper, ChatGPT, LangChain, ChromaDB, MongoDB, FastAPI.
+
+#### Frontend
+- **Display**: Showcases all meeting notes and provides detailed views of specific entries.
+- **Functionality**: Supports searching across all notes and dynamically presents notes similar to the current focus.
+- **Technology**: Built with React, TailwindCSS, HTML, and Vanilla JavaScript.
+
+### Technologies Employed
+- **Browser Extension**: TailwindCSS, Vanilla JavaScript, Chromium APIs.
+- **Backend**: OpenAI Whisper, ChatGPT, LangChain, ChromaDB, MongoDB, FastAPI.
+- **Frontend**: React, TailwindCSS, HTML, Vanilla JavaScript.
+
+## Installation Guide
 
 ### Browser Extension
-- record microphone and system audio and sends it for processing
-- receives in real time similar notes
-- encorporates tailwindCSS and vanilla JS and chromiumAPI 
-- passes WCAG accesibility requirements
-
-### Backened
-- uses OpenAI Whsiper speech-to-text model to create transcript
-- uses GPT to summarize meeting and computes embedings to represent high dimensional features  to retrive similar semanticly notes
-- stores sumarized notes and their embeddings in databases
-
-### Frontend
-- presents all notes
-- present note details and similiar notes to current one
-- allows full-text search capabilities
-
-
-## Technologies 
-- browser extension - tailwindCSS and vanilla JS and chromiumAPI 
-- backened - openAI Whisper, ChatGPT, langchain, chromaDB, mongoDB, fastApi
-- frontend - React, tailwindCSS, html and vanilaJS
-
-## Instalation guide
-
-- browser extension
 ```shell
-# open browser 
-# go to extensions and turn on developer mode
-# load unpacked `extension folder`
+# Open your browser and navigate to the extensions page.
+# Enable developer mode.
+# Load the unpacked extension from the 'extension folder'.
 ```
 
-- backend
+### Backend Setup
 ```shell
 cp .env.example .env
-# INSERT OPENAI_API_KEY
+# Insert your OPENAI_API_KEY here.
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirement.txt
-docker compose up
+pip install -r requirements.txt
+docker-compose up
 ```
 
-- webpage
+### Webpage Deployment
 ```shell
 npm install
+npm start
 ```
 
-## Future ideas
-- create or fine tune specific purpose model
+## Future Development
+- **AI Model Enhancement**: Investigate the creation or fine-tuning of specialized models tailored for specific types of meetings and industries.
+
+### Summary
+Our framework is designed to transform how individuals and organizations manage their meeting workflows by automating the capture, analysis, and retrieval of meeting content. By integrating state-of-the-art AI technologies, we provide a scalable solution that enhances productivity and facilitates better decision-making processes. This proposal outlines our commitment to delivering a robust, accessible, and technologically advanced system for effective meeting management.
