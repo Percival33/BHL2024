@@ -2,7 +2,7 @@ import {apiEndpoints, headerConfig, responseKeys} from "./constants.js";
 
 export let mediaRecorder;
 let audioChunks = [];
-const CHUNK_INTERVAL = 10_000;
+const CHUNK_INTERVAL = 15_000;
 const output = new AudioContext();
 const validateBody = (body) => {
     const currentMeetingId = sessionStorage.getItem(headerConfig.sessionKey)
@@ -95,7 +95,6 @@ export const getNewSuggestions = async () => {
 let tabStream;
 let tabSource;
 chrome.tabCapture.getMediaStreamId({}, async (streamId) => {
-    console.log("HELLO")
     tabStream = await navigator.mediaDevices.getUserMedia({
             audio: {
                 mandatory: {

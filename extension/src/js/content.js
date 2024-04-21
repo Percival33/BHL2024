@@ -10,17 +10,18 @@ sessionStorage.clear();
 
 let intervalId;
 let elapsedSeconds = 0;
-const SUGGESTIONS_RATE = 3_000;
+const SUGGESTIONS_RATE = 10_000;
 let suggestionsInterval = null;
 
 
 function createDataRow(item, index) {
     const row = document.createElement("li");
-    row.className = 'data-row flex rounded-lg bg-our_dark  items-center justify-between p-4 transition ease-in-out duration-300 hover:bg-our_gray';
+    const percentage = Math.round(100 * item.similarity);
+    row.className = 'data-row  rounded-lg bg-our_dark p-4 transition ease-in-out duration-300 hover:bg-our_gray';
     row.dataset.index = index;
 
     row.innerHTML = `
-            <a href=${item.uri} target="_blank">
+            <a href="${item.uri}" target="_blank" class="items-center justify-between flex ">
                 <div>
                     <div class="grid grid-rows-2 items-center">
                         <div class="font-bold text-our_white text-2xl">${item.title}</div>
@@ -30,10 +31,10 @@ function createDataRow(item, index) {
                 <div>
                     <div class="w-40 ml-4 text-our_white">
                         <div class="flex justify-end mb-1">
-                            <span class="text-sm font-medium">50% match</span>
+                            <span class="text-sm font-medium">${percentage}% match</span>
                         </div>
                         <div class=" bg-our_white rounded-full h-2.5">
-                            <div class="bg-our_magenta h-2.5 rounded-full test"></div>
+                            <div class="bg-our_magenta h-2.5 rounded-full" style="width: ${percentage}%"></div>
                         </div>
                     </div>
                 </div>
@@ -50,7 +51,7 @@ const endCapturing = () => {
 
     clearInterval(suggestionsInterval);
     clearInterval(intervalId);
-
+    sessionStorage.clear();
     handleTimerStop();
     handleRecordButtonStop();
 
@@ -120,7 +121,4 @@ captureButton.onclick = async () => {
 
     endCapturing();
 }
-
-
-
 
