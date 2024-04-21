@@ -80,7 +80,7 @@ const handleTimerStop = () => {
 
 const updateSuggestions = (data) => {
     suggestionsDiv.innerHTML = '';
-    if (data) {
+    if (data && !('detail' in data)) {
         data
             .map((row, index) => createDataRow(row, index))
             .forEach(row => suggestionsDiv.appendChild(row))
@@ -90,7 +90,9 @@ const updateSuggestions = (data) => {
 const startSuggestions = async () => {
     const suggestions = await getNewSuggestions();
     updateSuggestions(suggestions);
-    suggestionsInterval = setInterval(() => getNewSuggestions().then(updateSuggestions).catch(e => console.log(e)), SUGGESTIONS_RATE);
+    suggestionsInterval = setInterval(() => getNewSuggestions()
+        .then(data => updateSuggestions(data))
+        .catch(e => console.log(e)), SUGGESTIONS_RATE);
 }
 
 

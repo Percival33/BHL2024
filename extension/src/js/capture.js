@@ -2,8 +2,8 @@ import {apiEndpoints, headerConfig, responseKeys} from "./constants.js";
 
 export let mediaRecorder;
 let audioChunks = [];
-const CHUNK_INTERVAL = 1_000;
-
+const CHUNK_INTERVAL = 10_000;
+const output = new AudioContext();
 const validateBody = (body) => {
     const currentMeetingId = sessionStorage.getItem(headerConfig.sessionKey)
     if (!currentMeetingId) {
@@ -55,16 +55,33 @@ const handleChunk = async (event) => {
     }
 }
 
+function mixAudioStreams(micStream) {
+    const micSource = output.createMediaStreamSource(micStream);
+
+    const destination = output.createMediaStreamDestination();
+
+    micSource.connect(destination);
+    tabSource.connect(destination)
+    return destination.stream;
+}
+
+async function getMixedStream() {
+    const micStream = await navigator.mediaDevices.getUserMedia({audio: true})
+    return mixAudioStreams(micStream)
+}
+
+
 export const startMediaRecorder = async () => {
-    const audioStream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
-    mediaRecorder = new MediaRecorder(audioStream);
+    const mixedStream = await getMixedStream();
+
+    mediaRecorder = new MediaRecorder(mixedStream);
     mediaRecorder.ondataavailable = handleChunk;
     mediaRecorder.onstop = () => {
+        audioChunks = [];
         console.log("Stopped recording");
     };
     mediaRecorder.start(CHUNK_INTERVAL);
     console.log("Started audio recording")
-
 }
 
 export const getNewSuggestions = async () => {
@@ -72,21 +89,23 @@ export const getNewSuggestions = async () => {
     if (!meetingId) {
         return;
     }
-    // const resp = await fetch(baseApiUrl + `/suggestions/${meetingId}`);
-    // const data = await resp.json();
-    return mockData;
+    const resp = await fetch(apiEndpoints.getSuggestions(meetingId));
+    return await resp.json();
 }
-
-
-let mockData = [
-    {
-        uri: "https://twitter.com/mamodrzejewski",
-        title: "Hello Happy World",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nunc tortor, convallis vitae molestie in, posuere in nisi. Pellentesque habitant."
-    },
-    {
-        uri: "https://twitter.com/mamodrzejewski",
-        title: "Hello Sad World",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nunc tortor, convallis vitae molestie in, posuere in nisi. Pellentesque habitant."
-    },
-]
+let tabStream;
+let tabSource;
+chrome.tabCapture.getMediaStreamId({}, async (streamId) => {
+    console.log("HELLO")
+    tabStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                mandatory: {
+                    chromeMediaSource: "tab",
+                    chromeMediaSourceId: streamId,
+                },
+            },
+            video: false
+        }
+    )
+    tabSource = output.createMediaStreamSource(tabStream);
+    tabSource.connect(output.destination);
+});
