@@ -1,4 +1,5 @@
 import abc
+import concurrent.futures
 
 from openai import OpenAI
 
@@ -28,8 +29,12 @@ class OpenAISummarizer(Summarizer):
         self._model_name = model_name
 
     def summarize(self, meeting_id: MeetingId, text: str) -> Note:
-        title = self._get_title(text)
-        abstract = self._get_abstract(text)
+        with concurrent.futures.ThreadPoolExecutor() as exe:
+            title_future = exe.submit(self._get_title, text)
+            abstract_future = exe.submit(self._get_abstract, text)
+
+            title = title_future.result()
+            abstract = abstract_future.result()
 
         return Note(meeting_id, title, abstract)
 

@@ -7,6 +7,11 @@ class ChromaSettings(BaseModel):
     port: int
 
 
+class MongoSettings(BaseModel):
+    host: str
+    port: int
+
+
 class Settings(BaseSettings):
     host: str
     port: int
@@ -15,6 +20,7 @@ class Settings(BaseSettings):
     openai_api_key: str
     frontend_base_url: str
     chroma: ChromaSettings
+    mongo: MongoSettings
 
     model_config = SettingsConfigDict(
         env_file=(".env",), env_nested_delimiter="__"
