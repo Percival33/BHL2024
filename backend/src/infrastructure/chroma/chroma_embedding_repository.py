@@ -1,18 +1,28 @@
 import chromadb
+import chromadb.utils.embedding_functions as embedding_functions
 
 from src.application.embedding_repository import EmbeddingRepository, SimilarNote
 from src.domain.note import Note
 from src.domain.meeting_id import MeetingId
+from src.infrastructure.settings import settings
 
 
 class ChromaEmbeddingRepository(EmbeddingRepository):
     _COLLECTION_NAME = "notes"
 
-    def __init__(self, chroma_client: chromadb.ClientAPI) -> None:
+    def __init__(
+        self,
+        chroma_client: chromadb.ClientAPI,
+        model_name: str = "text-embedding-3-large",
+    ) -> None:
         self._client = chroma_client
         self._collection = self._client.get_or_create_collection(
             self._COLLECTION_NAME,
-            metadata={"hnsw:space": "cosine"}
+            metadata={"hnsw:space": "cosine"},
+            embedding_function=embedding_functions.OpenAIEmbeddingFunction(
+                api_key=settings.openai_api_key,
+                model_name=model_name,
+            )
         )
 
     def save(self, note: Note) -> None:
