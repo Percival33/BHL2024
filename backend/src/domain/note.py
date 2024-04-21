@@ -34,7 +34,7 @@ class Note:
 
     def __dict__(self) -> dict:
         return {
-            "id": self._meeting_id.value,
+            "meeting_id": self._meeting_id.value,
             "title": self._title,
             "content": self._content,
             "created_at": self._created_at,

@@ -40,8 +40,8 @@ class JsonFileNoteRepository(NoteRepository):
         with open(self._db_file, "r") as f:
             try:
                 for row in json.load(f):
-                    self._db[row["id"]] = Note(
-                        meeting_id=MeetingId(row["id"]),
+                    self._db[row["meeting_id"]] = Note(
+                        meeting_id=MeetingId(row["meeting_id"]),
                         title=row["title"],
                         content=row["content"],
                         created_at=datetime.datetime.fromisoformat(row["created_at"]),
