@@ -10,6 +10,7 @@ class ChromaSettings(BaseModel):
 class MongoSettings(BaseModel):
     host: str
     port: int
+    db_name: str
 
 
 class Settings(BaseSettings):

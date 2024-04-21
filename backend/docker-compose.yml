@@ -6,7 +6,16 @@ services:
       - index_data:/chroma/.chroma/index
     ports:
       - 8000:8000
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
 
 volumes:
   index_data:
+    driver: local
+  mongo_data:
     driver: local
