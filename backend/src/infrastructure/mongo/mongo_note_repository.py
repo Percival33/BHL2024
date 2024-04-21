@@ -1,3 +1,4 @@
+import logging
 from typing import Mapping, Any
 
 from pymongo import MongoClient
@@ -6,6 +7,8 @@ from src.application.note_repository import NoteRepository
 from src.domain.meeting_id import MeetingId
 from src.domain.note import Note
 from src.infrastructure.settings import settings
+
+logger = logging.getLogger(__name__)
 
 
 class MongoNoteRepository(NoteRepository):
@@ -17,6 +20,8 @@ class MongoNoteRepository(NoteRepository):
         self._notes = self._db[self._COLLECTION_NAME]
 
     def save(self, note: Note) -> None:
+        logger.info("Saving note for meeting %s", note.id)
+
         self._notes.update_one(
             {"meeting_id": note.id.value},
             {"$set": note.__dict__()},
@@ -24,7 +29,7 @@ class MongoNoteRepository(NoteRepository):
         )
 
     def find(self, ids: list[MeetingId] | None = None) -> list[Note]:
-        query = {"meeting_name": {"$in": [id_.value for id_ in ids]}} if ids else {}
+        query = {"meeting_id": {"$in": [id_.value for id_ in ids]}} if ids else {}
         notes = self._notes.find(query)
 
         return [self._map_collection_to_note(note) for note in notes]
