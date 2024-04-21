@@ -9,19 +9,22 @@
 </head>
 <body class="bg-our_white font-sans">
 <div>
-    <div class="items-center flex bg-our_dark p-4">
-        <div class="flex-1 text-left p-4 text-our_white font-mono text-3xl" id="timer">00:00:00</div>
-        <button class="flex-2 p-3 text-our_white rounded-lg text-2xl text-center flex items-center justify-center space-x-2"
+    <div class="items-center flex bg-our_dark p-4 justify-between">
+        <div class="text-left p-4 text-our_white font-mono text-3xl" id="timer">00:00:00</div>
+        <a href="">
+            <img src="icon.png" alt="logo" width="64px">
+        </a>
+        <button class="flex-3 p-3 text-our_white rounded-lg text-2xl text-center flex items-center justify-center space-x-2 bg-our_gray transition ease-in-out duration-300 hover:bg-our_dark hover:border-our_magenta border-our_gray border"
                 id="capture-btn" type="button">
+            <span class="text-3xl font-bold" id="capture-btn-text">
+                Capture
+            </span>
             <?xml version="1.0" encoding="utf-8"?>
             <svg id="recordingIcon" fill="#A5668B" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg"
                  class="w-7 h-7 mr-2">
                 <path d="M960 0c529.36 0 960 430.645 960 960 0 529.36-430.64 960-960 960-529.355 0-960-430.64-960-960C0 430.645 430.645 0 960 0Zm0 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.12 379.934 847.06 847.059 847.06 467.12 0 847.06-379.94 847.06-847.06 0-467.125-379.94-847.059-847.06-847.059Zm0 313.726c294.55 0 533.33 238.781 533.33 533.333 0 294.55-238.78 533.33-533.33 533.33-294.552 0-533.333-238.78-533.333-533.33 0-294.552 238.781-533.333 533.333-533.333Z"
                       fill-rule="evenodd"/>
             </svg>
-            <span class="text-3xl" id="capture-btn-text">
-                Capture
-            </span>
         </button>
     </div>
 

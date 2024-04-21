@@ -8,9 +8,6 @@ module.exports = {
                 our_magenta: "#A5668B",
                 our_gray: "#374151",
                 our_dark: "#1C3144"
-            },
-            fontFamily: {
-                sans: ['Roboto', 'sans-serif']
             }
         },
     },

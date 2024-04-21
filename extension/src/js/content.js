@@ -16,16 +16,28 @@ let suggestionsInterval = null;
 
 function createDataRow(item, index) {
     const row = document.createElement("li");
-    row.className = 'data-row flex rounded-lg bg-our_dark  items-center p-2 px-6';
+    row.className = 'data-row flex rounded-lg bg-our_dark  items-center justify-between p-4 transition ease-in-out duration-300 hover:bg-our_gray';
     row.dataset.index = index;
 
     row.innerHTML = `
-                <a href=${item.uri} target="_blank">
+            <a href=${item.uri} target="_blank">
+                <div>
                     <div class="grid grid-rows-2 items-center">
-                        <div class="font-bold text-our_white">${item.title}</div>
-                        <div class="text-our_white">lorem</div>
+                        <div class="font-bold text-our_white text-2xl">${item.title}</div>
+                        <div class="text-our_white truncate w-96">${item.content}</div>
                     </div>
-                </a>
+                </div>
+                <div>
+                    <div class="w-40 ml-4 text-our_white">
+                        <div class="flex justify-end mb-1">
+                            <span class="text-sm font-medium">50% match</span>
+                        </div>
+                        <div class=" bg-our_white rounded-full h-2.5">
+                            <div class="bg-our_magenta h-2.5 rounded-full test"></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
     `;
     return row;
 }
@@ -89,6 +101,7 @@ const updateSuggestions = (data) => {
 
 const startSuggestions = async () => {
     const suggestions = await getNewSuggestions();
+    console.log(suggestions)
     updateSuggestions(suggestions);
     suggestionsInterval = setInterval(() => getNewSuggestions()
         .then(data => updateSuggestions(data))
