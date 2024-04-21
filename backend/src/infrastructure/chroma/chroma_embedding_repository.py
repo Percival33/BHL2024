@@ -23,10 +23,6 @@ class ChromaEmbeddingRepository(EmbeddingRepository):
         self._collection = self._client.get_or_create_collection(
             self._COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
-            embedding_function=embedding_functions.OpenAIEmbeddingFunction(
-                api_key=settings.openai_api_key,
-                model_name=model_name,
-            )
         )
 
     def save(self, note: Note) -> None:
