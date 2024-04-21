@@ -7,7 +7,7 @@
 - [Krzysztof Fijałkowski](https://github.com/kfijalkowski1)
 - [Marcin Jarczewski](https://github.com/Percival33)
 
-## Project Overview: Unified Meeting Framework
+## Project Overview: Unified Meeting Notes Framework
 
 ### Executive Summary
 Our project introduces an innovative framework designed to enhance meeting productivity by seamlessly integrating the recording, summarization, and retrieval of both online and offline meetings. Utilizing a browser extension, our system captures audio inputs and leverages cutting-edge AI technologies to process, summarize, and contextually link meeting content, presenting it through a highly accessible user interface.
