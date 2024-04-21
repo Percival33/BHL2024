@@ -5,7 +5,8 @@ from src.domain.exceptions import DomainException
 from src.infrastructure.api.error_handlers import application_error_handler
 from src.infrastructure.api.routes import router
 from src.infrastructure.containers import Container
-origins = [
+
+ALLOWED_ORIGINS = [
     "http://localhost",
     "http://localhost:3000",
 ]
@@ -16,7 +17,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
