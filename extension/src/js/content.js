@@ -10,7 +10,7 @@ sessionStorage.clear();
 
 let intervalId;
 let elapsedSeconds = 0;
-const SUGGESTIONS_RATE = 10_000;
+const SUGGESTIONS_RATE = 5_000;
 let suggestionsInterval = null;
 
 
@@ -93,7 +93,7 @@ const handleTimerStop = () => {
 
 const updateSuggestions = (data) => {
     suggestionsDiv.innerHTML = '';
-    if (data && !('detail' in data)) {
+    if (data && suggestionsInterval) {
         data
             .map((row, index) => createDataRow(row, index))
             .forEach(row => suggestionsDiv.appendChild(row))
